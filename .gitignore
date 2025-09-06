@@ -36,3 +36,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+.idea/discord.xml
+.idea/easycode.ignore
+.idea/easycode/codebase-v2.xml
+.idea/encodings.xml
+.idea/vcs.xml
+.idea/misc.xml
