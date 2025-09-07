@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,9 +23,46 @@ public class Main extends ApplicationAdapter {
         FitViewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         camera.setToOrtho(false);
         ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setAutoShapeType(true);
         SpriteBatch spriteBatch = new SpriteBatch();
         GameStateMachine gameStateMachine = new GameStateMachine();
-        CharSheet charSheet = new CharSheet("dungeon-mode.png", 8, 8, 16, 16);
+
+        Texture fontTex = CharSheet.loadFontAsAlpha("dungeon-mode.png");
+        String[] LAYOUT = {
+                "················", // 0  (icons)
+                "················",
+                ".,!?-+/\\()*:[_]^",// 1  (icons)
+                "0123456789·;<=>%", // 2  digits + punctuation
+                "@ABCDEFGHIJKLMNO", // 4  uppercase (starts with '@')
+                "PQRSTUVWXYZ`?~$&",// 5  uppercase tail + brackets
+                "#abcdefghijklmno", // 6  lowercase
+                "pqrstuvwxyz\"?···", // 7  lowercase tail + braces/tilde
+                "················", // 8  (tiles/icons)
+                "················", // 9
+                "················", // 10
+                "················", // 11
+                "················", // 12
+                "················", // 13
+                "················", // 14
+                "················"  // 15
+        };
+
+        CharSheet charSheet = CharSheet.fromGrid(
+                fontTex,
+                8, 8,        // cellW, cellH
+                LAYOUT,
+                8,           // lineHeight
+                7,           // defaultAdvance
+                4            // spaceAdvance
+        );
+
+
+
+        // optional tidy-ups
+        charSheet.alias('“','"').alias('”','"').alias('‘','\'').alias('’','\'').alias('—','-').alias('…','.');
+        charSheet.setAdvance('.', 5).setAdvance(',', 5).setAdvance('!', 6).setAdvance('i', 6);
+
+
         Music emptyMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/heavenly_night.mp3"));
         ctx = new GameContext(gameStateMachine, camera, viewport, spriteBatch, shapeRenderer, charSheet, emptyMusic);
         gameStateMachine.push(new StartGameState(ctx));
@@ -45,7 +83,9 @@ public class Main extends ApplicationAdapter {
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        ctx.getShapes().begin();
         ctx.getGsm().shapeRender();
+        ctx.getShapes().end();
     }
 
     @Override

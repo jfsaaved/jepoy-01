@@ -15,13 +15,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import org.jepoy.GameContext;
 import org.jepoy.text.TypeSounds;
-import org.jepoy.text.TypewriterText;
+import org.jepoy.text.TypeWriterText;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class IntroState extends State {
-    TypewriterText typewriterText;
+    TypeWriterText typewriterText;
     float x = 100, y = 100;
     Rectangle box;
     TypeSounds sfx;
@@ -92,37 +92,37 @@ public class IntroState extends State {
         box = new Rectangle(bx, by, bw, bh);
         sfx = new TypeSounds();
 
-        typewriterText = new TypewriterText(ctx.getCharSheet(), box, 8f, 2f);
+        typewriterText = new TypeWriterText(ctx.getCharSheet(), box, 8f, 2f);
 
         typewriterText.setListener((ch, idx) -> {
-            sfx.playFor(ch);
+            //sfx.playFor(ch);
         });
 
-        typewriterText.setCharsPerSecond(19f);
+        typewriterText.setCharsPerSecond(18f);
         typewriterText.setLineSpacing(1f);
-        textMap.put(0,  "we have not met before, traveler. i keep watch on this road when the nights grow cold and the wind forgets our names. the fire is small, but it is honest; it keeps wolves—and worse—at the edge of the dark.");
+        textMap.put(0,  "We have not met before, traveler. I keep watch on this road when the nights grow cold and the wind forgets our names. The fire is small, but it is honest; it keeps wolves—and worse—at the edge of the dark.");
 
-        textMap.put(1,  "you carry yourself like one with questions. ask, and i will answer what i can, but know this: truth is heavier than steel and cuts deeper when bared. some truths you must cradle, or they will unmake your sleep.");
+        textMap.put(1,  "You carry yourself like one with questions. Ask, and I will answer what I can, but know this: truth is heavier than steel and cuts deeper when bared. Some truths you must cradle, or they will unmake your sleep.");
 
-        textMap.put(2,  "this land is not what it once was. the roads are quiet, yet the stones remember every oath and every footfall; fields lie stitched with old wards, and maps lie because the world refuses to stay still.");
+        textMap.put(2,  "This land is not what it once was. The roads are quiet, yet the stones remember every oath and every footfall; fields lie stitched with old wards, and maps lie because the world refuses to stay still.");
 
-        textMap.put(3,  "long ago, kingdoms rose and fell chasing a power none could keep. banners changed, oaths were traded like coin, and generals promised dawns that tasted of ash. hunger stayed when every harvest failed.");
+        textMap.put(3,  "Long ago, kingdoms rose and fell chasing a power none could keep. Banners changed, oaths were traded like coin, and generals promised dawns that tasted of ash. Hunger stayed when every harvest failed.");
 
-        textMap.put(4,  "power always asks a price. we paid in oaths, in blood, and in names that no one speaks anymore because names are doors and doors swing both ways. the debt comes late, but it always knows the road to your fire.");
+        textMap.put(4,  "Power always asks a price. We paid in oaths, in blood, and in names that no one speaks anymore because names are doors and doors swing both ways. The debt comes late, but it always knows the road to your fire.");
 
-        textMap.put(5,  "the stones and the old magicks were never meant for hands like ours. we bent them to our will until they bent us back; some wounds do not bleed—they echo. you can hide a scar from others, never from night.");
+        textMap.put(5,  "The stones and the old magicks were never meant for hands like ours. We bent them to our will until they bent us back; some wounds do not bleed—they echo. You can hide a scar from others, never from night.");
 
-        textMap.put(6,  "many sought the relics; few returned with more than stories that shook in their throats. those who came back brought riddles, and a light behind the eyes that ruined their sleep. i was one of them, once.");
+        textMap.put(6,  "Many sought the relics; few returned with more than stories that shook in their throats. Those who came back brought riddles, and a light behind the eyes that ruined their sleep. I was one of them, once.");
 
-        textMap.put(7,  "you remind me of a comrade from the border war—brave, stubborn, certain that destiny listened when he spoke. he ran toward thunder and laughed so the line would not break. i still hear that laugh when rain begins.");
+        textMap.put(7,  "You remind me of a comrade from the border war—brave, stubborn, certain that destiny listened when he spoke. He ran toward thunder and laughed so the line would not break. I still hear that laugh when rain begins.");
 
-        textMap.put(8,  "if you wish, i will tell you what became of us: the ford at keld, the night the river turned against our feet, and the bargain we tried to refuse. i will tell you why i sit here where no patrol rides anymore.");
+        textMap.put(8,  "If you wish, I will tell you what became of us: the ford at Keld, the night the river turned against our feet, and the bargain we tried to refuse. I will tell you why I sit here where no patrol rides anymore.");
 
-        textMap.put(9,  "but once you know the truth, sleep will come slower. stories take their due and never give it back; faces will live in the coals, and the rain will learn your name. you will not be the same traveler at dawn.");
+        textMap.put(9,  "But once you know the truth, sleep will come slower. Stories take their due and never give it back; faces will live in the coals, and the rain will learn your name. You will not be the same traveler at dawn.");
 
-        textMap.put(10, "will you hear the story, traveler? nod, and i will begin at the milestone where the road bends east and fate learned our names. if you would turn away, do it now, while the fire is kind and the dark still merciful.");
+        textMap.put(10, "Will you hear the story, traveler? Nod, and I will begin at the milestone where the road bends east and fate learned our names. If you would turn away, do it now, while the fire is kind and the dark still merciful.");
 
-        typewriterText.setText("we have not met before, traveler. i keep watch on this road when the nights grow cold and the wind forgets our names. the fire is small, but it is honest; it keeps wolves—and worse—at the edge of the dark.");
+        typewriterText.setText("We have not met before, traveler. I keep watch on this road when the nights grow cold and the wind forgets our names. The fire is small, but it is honest; it keeps wolves—and worse—at the edge of the dark.");
 
 
 
@@ -376,7 +376,7 @@ public class IntroState extends State {
             fireShader.setUniformf("u_time", fireT);
             fireShader.setUniformf("u_darkStart", 0.12f);
             fireShader.setUniformf("u_darkEnd", 0.2f);
-            fireShader.setUniformf("u_ambient", 0.0f);
+            fireShader.setUniformf("u_ambient", 0.8f);
 
 
             fireShader.setUniformf("u_firePos", 0.50f, 0.12f);
@@ -390,7 +390,7 @@ public class IntroState extends State {
             fireShader.setUniformf("u_tintPulseAmp", 0.35f);
             fireShader.setUniformf("u_tintPulseHz", 7.0f);
 
-            fireShader.setUniformf("u_waveAmpPx", 0.5f);  // pixels of wobble
+            fireShader.setUniformf("u_waveAmpPx", 0.3f);  // pixels of wobble
             fireShader.setUniformf("u_waveFreqX", 10.0f);
             fireShader.setUniformf("u_waveFreqY", 14.0f);
             fireShader.setUniformf("u_waveSpeed", 4.0f);
@@ -498,7 +498,7 @@ public class IntroState extends State {
             if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && !typewriterText.isDone()) {
                 typewriterText.skipAll();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && currentTextMapIndex < 10) {
-                Sound sfx = Gdx.audio.newSound(Gdx.files.internal("sounds/cursor.mp3"));// Optional: loop it// Volume: 0.0 to 1.0
+                Sound sfx = Gdx.audio.newSound(Gdx.files.internal("sounds/knight_02.mp3"));// Optional: loop it// Volume: 0.0 to 1.0
                 sfx.play(0.7f, 1f, 0f);
                 currentTextMapIndex++;
                 typewriterText.setText(textMap.get(currentTextMapIndex));
