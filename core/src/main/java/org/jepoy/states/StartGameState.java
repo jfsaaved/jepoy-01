@@ -4,9 +4,9 @@ package org.jepoy.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import org.jepoy.GameContext;
-import org.jepoy.text.CharSheet;
+import org.jepoy.text.StaticSpriteText;
 
 public class StartGameState extends State {
     // pulse
@@ -18,18 +18,28 @@ public class StartGameState extends State {
     // fade-out
     private boolean fading = false;
     private float fadeT = 0f;
-    private final float fadeDuration = 0.6f; // seconds
 
-    public StartGameState(GameContext ctx) { super(ctx); }
+    Rectangle box;
+    StaticSpriteText staticSpriteText;
+
+    private float pulseT = 0f;
+
+    public StartGameState(GameContext ctx) {
+        super(ctx);
+        box = new Rectangle((ctx.getViewport().getWorldWidth() - 300) / 2f, (ctx.getViewport().getWorldHeight() - 100) / 2f, 500, 100);
+        staticSpriteText = new StaticSpriteText(ctx.getCharSheet(), box, 1f, 4f);
+        staticSpriteText.setText("START GAME");
+    }
 
     @Override
     void update(float dt) {
         startBlinkT += dt;
-
+        pulseT += dt;
         if (fading) {
             fadeT += dt;
+            // seconds
+            float fadeDuration = 0.6f;
             if (fadeT >= fadeDuration) {
-                // fade finished -> switch state here
                 ctx.getGsm().set(new IntroState(ctx));
                 return;
             }
@@ -49,52 +59,16 @@ public class StartGameState extends State {
 
     @Override
     void render() {
-        final var sheet = ctx.getCharSheet();
-        final float ww = ctx.getViewport().getWorldWidth();
-        final float wh = ctx.getViewport().getWorldHeight();
-        final float lh = sheet.lineHeight * startScale;
-
-        final int wpx = textWidth(sheet, startMsg, startScale);
-        final float x = (ww - wpx) * 0.5f;
-        final float y = (wh - lh) * 0.5f;
-
-        // ---- smooth pulse alpha (0.2 .. 1.0) ----
-        float phase = (startBlinkT % startPeriod) / startPeriod;     // 0..1
-        float raw   = 0.5f + 0.5f * (float)Math.sin(phase * (float)Math.PI * 2f); // 0..1
-        float t     = raw * raw * (3f - 2f * raw);                    // smootherstep
-        float alphaPulse = 0.2f + 0.8f * t;
-
-        // ---- fade multiplier (1 -> 0) if fading ----
-        float fadeMul = fading ? Math.max(0f, 1f - (fadeT / fadeDuration)) : 1f;
-
-        // draw (isolated color so nothing else is affected)
-        final float oldPacked = ctx.getBatch().getPackedColor();
-        ctx.getBatch().setColor(1f, 1f, 1f, alphaPulse * fadeMul);
-        CharSheet.drawText(ctx.getBatch(), sheet, startMsg, x, y, 4f);
-        ctx.getBatch().setPackedColor(oldPacked);
+        staticSpriteText.drawBlinking(ctx, pulseT, 1f);
     }
 
     @Override
     void shapeRender() {
-        // optional: draw a vignette or dim the background here using ShapeRenderer
-        // e.g., a translucent black full-screen rect while on the start screen
+        //ctx.getShapes().rect(box.x, box.y, box.width, box.height);
     }
 
     @Override
     void dispose() {
         // nothing to dispose here; shared resources live in GameContext
-    }
-
-    private int charW(CharSheet sheet, char ch, float scale) {
-        if (ch == ' ') return Math.round(sheet.advance * scale);
-        TextureRegion r = sheet.regionFor(ch);
-        return (r != null) ? Math.round(r.getRegionWidth() * scale)
-                : Math.round(sheet.advance * scale / 2f);
-    }
-
-    private int textWidth(CharSheet sheet, String s, float scale) {
-        int w = 0;
-        for (int i = 0; i < s.length(); i++) w += charW(sheet, s.charAt(i), scale);
-        return w;
     }
 }

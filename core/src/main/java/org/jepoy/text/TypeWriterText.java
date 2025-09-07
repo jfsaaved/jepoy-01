@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.ObjectFloatMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class TypewriterText {
+public class TypeWriterText {
     private final CharSheet sheet;
     private String text = "";
     private float scale = 1f;
@@ -28,15 +28,18 @@ public class TypewriterText {
     public void setListener(CharRevealListener l) { this.listener = l; }
 
 
-    public TypewriterText(CharSheet sheet, Rectangle boundsBL, float padding, float scale) {
+    public TypeWriterText(CharSheet sheet, Rectangle boundsBL, float padding, float scale) {
         this.sheet = sheet;
         this.scale = scale;
         this.box.set(boundsBL);
         this.padding = padding;
-        pause.put('.', 0.20f);
-        pause.put(',', 0.12f);
-        pause.put('!', 0.18f);
-        pause.put('?', 0.18f);
+        pause.put('.', 0.80f);
+        pause.put(',', 0.80f);
+        pause.put(';', 0.26f);
+        pause.put(':', 1f);
+        pause.put('!', 0.34f);
+        pause.put('?', 0.34f);
+        pause.put('—', 0.30f);   // em dash
     }
 
     public void setText(String t) {
@@ -80,11 +83,9 @@ public class TypewriterText {
         // helpers
         java.util.function.IntUnaryOperator charW = idx -> {
             char ch = text.charAt(idx);
-            if (ch == ' ') return Math.round(sheet.advance * scale);
-            TextureRegion r = sheet.regionFor(ch);
-            if (r == null) return Math.round(sheet.advance * scale / 2f);
-            return Math.round(r.getRegionWidth() * scale);
+            return Math.round(sheet.advanceOf(ch) * scale);
         };
+
         java.util.function.IntBinaryOperator spanW = (i, j) -> {
             int w = 0;
             for (int k = i; k < j; k++) w += charW.applyAsInt(k);
