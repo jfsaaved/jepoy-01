@@ -47,10 +47,16 @@ public class Main extends ApplicationAdapter {
                 "················"  // 15
         };
 
+        Texture fontTex2 = new Texture(Gdx.files.internal("font_p-gorrister.png"));
+        String[] LAYOUT2 = {
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+                ".,····\"'?!@_*#$%&()+-/:;<=>[·]^`{|}~··························"
+        };
+
         CharSheet charSheet = CharSheet.fromGrid(
-                fontTex,
+                fontTex2,
                 8, 8,        // cellW, cellH
-                LAYOUT,
+                LAYOUT2,
                 8,           // lineHeight
                 7,           // defaultAdvance
                 4            // spaceAdvance

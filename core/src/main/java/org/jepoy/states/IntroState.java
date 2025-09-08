@@ -13,9 +13,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 import org.jepoy.GameContext;
-import org.jepoy.text.TypeSounds;
-import org.jepoy.text.TypeWriterText;
+import org.jepoy.text.*;
+import org.jepoy.util.ChromaKey;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -80,8 +81,13 @@ public class IntroState extends State {
 
     private boolean finishedFadeIn;
 
+    JepoyChatBox chatBalloon;
+
     public IntroState(GameContext ctx) {
         super(ctx);
+
+        chatBalloon = new JepoyChatBox("chat_box_transparent.png", 32, 2)
+                .setContentPadding(24, 24, 24, 24);
 
         finishedFadeIn = false;
 
@@ -89,7 +95,7 @@ public class IntroState extends State {
         float bw = sw * 0.6f, bh = sh * 0.25f;
         float bx = (sw - bw) / 2f, by = sh * 0.10f;
 
-        box = new Rectangle(bx, by, bw, bh);
+        box = new Rectangle(bx - 100, by, bw + 200, bh);
         sfx = new TypeSounds();
 
         typewriterText = new TypeWriterText(ctx.getCharSheet(), box, 8f, 2f);
@@ -462,17 +468,11 @@ public class IntroState extends State {
         ctx.getBatch().setShader(null);
 
         if(finishedFadeIn) {
+            int f = (int)((System.currentTimeMillis()/120) % 4);
+            chatBalloon.draw(ctx.getBatch(), box.getX(), box.getY(), box.getWidth(), box.getHeight(), 2f, JepoyChatBox.Tail.NONE, 0.40f, f);
             typewriterText.draw(ctx.getBatch(), ctx.getViewport());
             if (typewriterText.isDone() &&  currentTextMapIndex < 10) {
-                float phase = (qPulseT % qPulsePeriod) / qPulsePeriod; // 0..1
-                float textAlpha = qMinAlpha + (1f - qMinAlpha) * 0.5f * (1f + (float) Math.sin(phase * Math.PI * 2f));
-                final Color tmp = ctx.getBatch().getColor(); // just to read current RGBA once
-                ctx.getBatch().setColor(0.2f, 0.2f, 0.2f, tmp.a * textAlpha);
-                TextureRegion q = ctx.getCharSheet().regionFor('?');
-                float textX = box.x + box.width - 48f;
-                float textY = box.y + 8f;
-                float s = 4f;
-                ctx.getBatch().draw(q, textX, textY, q.getRegionWidth() * s, q.getRegionHeight() * s);
+                chatBalloon.drawNextMarker(ctx.getBatch(), box.getX(), box.getY(), box.getWidth(), 2f, f);
             }
         }
 

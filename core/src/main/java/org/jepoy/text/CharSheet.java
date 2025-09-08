@@ -116,7 +116,7 @@ public final class CharSheet {
                 // lum = MathUtils.clamp((lum - 0.05f) / 0.15f, 0f, 1f);
 
                 // write white with alpha = luminance
-                dst.drawPixel(x, y, Color.rgba8888(1f, 1f, 1f, lum));
+                dst.drawPixel(x, y, Color.rgba8888(0f, 0f, 0f, lum));
             }
         }
         Texture t = new Texture(dst);
